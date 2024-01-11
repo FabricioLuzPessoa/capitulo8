@@ -1,0 +1,153 @@
+warning: in the working copy of 'src/App.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/index.css', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/src/App.js b/src/App.js[m
+[1mindex 358b589..4b895cc 100644[m
+[1m--- a/src/App.js[m
+[1m+++ b/src/App.js[m
+[36m@@ -1,32 +1,69 @@[m
+[31m-import React, { Component } from "react";[m
+[32m+[m[32mimport React, { Component }                       from "react";[m
+ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";[m
+[31m-import Topo from "./components/Topo";[m
+[31m-import Home from "./components/Home";[m
+[31m-import Frontend from "./components/Frontend";[m
+[31m-import Programacao from "./components/Programacao";[m
+[31m-import Design from "./components/Design";[m
+[31m-import Catalogo from "./components/Catalogo";[m
+[31m-import NotFound from "./components/NotFound";[m
+[31m-import Rodape from "./components/Rodape";[m
+[32m+[m[32mimport Topo                                       from "./components/Topo";[m
+[32m+[m[32mimport Home                                       from "./components/Home";[m
+[32m+[m[32mimport Frontend                                   from "./components/Frontend";[m
+[32m+[m[32mimport Programacao                                from "./components/Programacao";[m
+[32m+[m[32mimport Design                                     from "./components/Design";[m
+[32m+[m[32mimport Catalogo                                   from "./components/Catalogo";[m
+[32m+[m[32mimport NotFound                                   from "./components/NotFound";[m
+[32m+[m[32mimport Rodape                                     from "./components/Rodape";[m
+[32m+[m[32m//import Livro                                      from "./components/Livro";[m
+[32m+[m[32mimport axios                                      from "axios";[m
+ import "./index.css";[m
+ [m
+ class App extends Component {[m
+[32m+[m
+[32m+[m[32m  state = {[m
+[32m+[m[32m    livros : [][m
+[32m+[m[32m  }[m
+[32m+[m
+   render() {[m
+     return ([m
+       <Router>[m
+         <Topo />[m
+         <Routes>[m
+[31m-          <Route path="/"            element={<Home/>}        />[m
+[31m-          <Route path="/frontend"    element={<Frontend/>}    />[m
+[31m-          <Route path="/programacao" element={<Programacao/>} />[m
+[31m-          <Route path="/design"      element={<Design/>}      />[m
+[31m-          <Route path="/catalogo"    element={<Catalogo/>}    />[m
+[31m-          <Route component={NotFound} />[m
+[32m+[m[32m          <Route path="/"            element={ <Home        livros={ this.state.livros }/>}/>[m
+[32m+[m[32m          <Route path="/frontend"    element={ <Frontend    livros={ this.state.livros }/>}/>[m
+[32m+[m[32m          <Route path="/programacao" element={ <Programacao livros={ this.state.livros }/>}/>[m
+[32m+[m[32m          <Route path="/design"      element={ <Design      livros={ this.state.livros }/>}/>[m
+[32m+[m[32m          <Route path="/catalogo"    element={ <Catalogo    livros = {this.state.livros}/>}/>[m
+[32m+[m[32m          <Route                     element={ <NotFound/>                                }/>[m
+         </Routes>[m
+         <Rodape />[m
+       </Router>[m
+     );[m
+   }[m
+[32m+[m
+[32m+[m[32m  // Usando o Axios para obter o array de objetos JSON[m
+[32m+[m[32m  async componentDidMount(){ // O objetivo aqui e preencher o array livros com os dados vindo do json todosOsLivros.json[m
+[32m+[m[32m    try{[m
+[32m+[m[32m      const {data: livros} = await axios.get("/api/todosOsLivros.json"); // retorno padrão data foi renomeado para livros[m
+[32m+[m[32m      this.setState({livros})[m[41m  [m
+[32m+[m[32m    } catch (error){[m
+[32m+[m[32m      console.log(error);[m
+[32m+[m[32m      document[m
+[32m+[m[32m        .querySelectorAll(".principal")[0][m
+[32m+[m[32m        .insertAdjacentHTML([m
+[32m+[m[32m          "beforend",[m
+[32m+[m[32m          "<p class='erro'>Mensagem de erro</p>"[m
+[32m+[m[32m        )[m
+[32m+[m[32m    }[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  // Uso da API nativa fetch que faz a mesma coisa que o axios[m
+[32m+[m[32m  async componentDidMountX(){ // O objetivo aqui e preencher o array livros com os dados vindo do json todosOsLivros.json[m
+[32m+[m[32m    fetch("/api/todosOsLivros.json")[m
+[32m+[m[32m    .then(response => response.json())[m
+[32m+[m[32m    .then(livros => this.setState({livros}))[m
+[32m+[m[32m    .catch(function(error) {[m
+[32m+[m[32m      document[m
+[32m+[m[32m      .querySelectorAll("main")[0][m
+[32m+[m[32m      .insertAdjacentHTML("beforeend", "<p class='alerta'>Mensagem de erro</p>")[m
+[32m+[m[32m    })[m[41m [m
+[32m+[m[32m  }[m
+ }[m
+ [m
+[32m+[m
+[32m+[m
+ export default App;[m
+[1mdiff --git a/src/components/Catalogo.js b/src/components/Catalogo.js[m
+[1mindex a6bbb51..79c5c8e 100644[m
+[1m--- a/src/components/Catalogo.js[m
+[1m+++ b/src/components/Catalogo.js[m
+[36m@@ -1,17 +1,42 @@[m
+[31m-import React from "react";[m
+[32m+[m[32mimport React, {Fragment} from "react";[m
+[32m+[m[32mimport {Link}            from "react-router-dom";[m
+ [m
+[31m-const Catalogo = () => ([m
+[31m-  <main className="principal">[m
+[31m-    <h2>Catálogo de livros</h2>[m
+[31m-    <ul>[m
+[31m-      <li>[m
+[31m-        <a href="#">Livro 1</a>[m
+[31m-      </li>[m
+[31m-      <li>[m
+[31m-        <a href="#">Livro 2</a>[m
+[31m-      </li>[m
+[31m-    </ul>[m
+[31m-  </main>[m
+[31m-);[m
+[32m+[m[32mconst Catalogo = ({livros}) => {                                                 //  ( 1 ) Props vindo do componente raiz App[m
+[32m+[m[32m    return([m
+[32m+[m[32m        <main className="principal">[m
+[32m+[m[32m            <h2>Categoria frontEnd</h2>                                          {/* ( 2 ) Marcação do titulo para a cat frontend */}[m
+[32m+[m[32m            <ol>[m
+[32m+[m[32m                {livros[m
+[32m+[m[32m                .filter(livro => livro.categoria === "frontend")                 // ( 3 ) Filtra apenas o objeto da categoria frontend[m
+[32m+[m[32m                .map(livro => (                                                  // ( 4 ) Faz o mapeamento desses objetos[m
+[32m+[m[32m                    <li key={livro.id}>                                          {/*( 5 ) Container para os elementos da lista tem que ter o key*/}[m
+[32m+[m[32m                        <Link to={`/livro/${livro.slug}`}>{livro.titulo}</Link>[m[41m        [m
+[32m+[m[32m                    </li>[m
+[32m+[m[32m                ))}[m
+[32m+[m[32m            </ol>[m
+[32m+[m[32m            <h2>Categoria Programação</h2>[m
+[32m+[m[32m            <ol>[m
+[32m+[m[32m                {livros[m
+[32m+[m[32m                .filter(livro => livro.categoria === "programacao")[m
+[32m+[m[32m                .map(livro => ([m
+[32m+[m[32m                    <li key={livro.id}>[m
+[32m+[m[32m                        <Link to={`/livro/${livro.slug}`}>{livro.titulo}</Link> {/*( 6 ) O atributo de link aponta para /livro/slug */}[m[41m       [m
+[32m+[m[32m                    </li>[m
+[32m+[m[32m                ))}[m
+[32m+[m[32m            </ol>[m
+[32m+[m[32m            <h2>Categoria Design</h2>[m
+[32m+[m[32m            <ol>[m
+[32m+[m[32m                {livros[m
+[32m+[m[32m                .filter(livro => livro.categoria === "design")[m
+[32m+[m[32m                .map(livro => ([m
+[32m+[m[32m                    <li key={livro.id}>[m
+[32m+[m[32m                        <Link to={`/livro/${livro.slug}`}>{livro.titulo}</Link>[m[41m        [m
+[32m+[m[32m                    </li>[m
+[32m+[m[32m                ))}[m[41m            [m
+[32m+[m[32m            </ol>[m
+[32m+[m[32m        </main>[m
+[32m+[m[32m    );[m
+[32m+[m[32m};[m
+[32m+[m[41m  [m
+ [m
+ export default Catalogo;[m
+[1mdiff --git a/src/components/Design.js b/src/components/Design.j
